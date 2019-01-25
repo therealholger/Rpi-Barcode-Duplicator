@@ -3,13 +3,12 @@ This is a super simple script for the Raspberry Pi (or any Linux computer, reall
 
 ## Setting up the environment
 
-**Note**: These instructions were created using a Raspberry PI 3 system running Raspbian OS.  Initial set up can be easier if you choose to install a desktop environment, but it is possible to configure everything using just command line tools.  They also assume you are logged in as the default user 'pi'.  
-
+**Note**: These instructions were created using a Raspberry Pi 3 system running Raspbian OS.  Initial set up can be easier if you choose to install a desktop environment, but it is possible to configure everything using just command line tools.  They also assume you are logged in as the default user 'pi' and connected to the internet.  Once the system is set up and running properly, an internet connection is not needed or recommended.
 
 Basic installation:
 
 * Install CUPS.  By default the web-based CUPS admin only listens to internal traffic, so using a desktop environment with a browser will make installing a printer easier.
-    * `sudo apt-get install cups`
+    * `sudo apt-get -y install cups`
 * Allow user 'pi' to administer printers
     * `sudo usermod -a -G lpadmin pi`
 * If you have not yet connected your printer via USB, do so now
@@ -19,11 +18,12 @@ Basic installation:
     * See the [CUPS documentation](https://www.cups.org/documentation.html) for installing your printer.  I have had success with Zebra printers and choosing the (ZPL) version during installation.
     * Suggest you manually enter a simple name for the printer (such as `zebra`) to make it easier to enter later.
 
-* Copy `printbarcode.sh` to your home directory.
+* Copy `printbarcode.sh` from this repo to your home directory.
+    * `wget https://raw.githubusercontent.com/marksandford/Raspberry-Pi-Barcode-Scanner/master/printbarcode.sh -P ~/`
     * **Note** The script sends raw ZPL to the printer.  ZPL is highly customizable.  See below for an explanation of what the script is doing and some example alternative formats.
 
 * Make the script executable
-    * `chmod +x printbarcode.sh`
+    * `chmod +x ~/printbarcode.sh`
 
 * Add the printbarcode.sh script to run immediately upon login
     * `echo "~/printbarcode.sh" >> ~/.bashrc`
@@ -35,16 +35,15 @@ Basic installation:
         * In the System tab
             * Check Boot: To CLI
             * Check Auto-login: Log in as user 'pi'
-    * From the command line
+    * Or from the command line
         * `sudo raspi-config`
         * Boot Options > Desktop/CLI
         * Choose Console Autologin
 
 * If you want to disable wifi to save power and better secure the device (strongly recommended):
-    * `sudo apt-get install rfkill`
+    * `sudo apt-get -y install rfkill`
     * `sudo rfkill block wifi`
 
-* 
 
 ## ZPL Language
 
@@ -101,11 +100,9 @@ No attempt is made to secure the Raspberry Pi's operating system.  For the scrip
 
 These risks are mitigated in several ways:
 
-* After the initial installion, there is no reason for the system to connect to the internet.  Killing wifi and not connecting to an ethernet port make remote access impossible.  
+* After the initial installation, there is no reason for the system to connect to the internet.  Killing wifi and not connecting to an ethernet port make remote access impossible.  
 * Someone would need physical access to the machine, plus a keyboard and monitor, to use it.
 * These are likely to be deployed in staff areas where only known individuals will have access to them.
 * The raspberry pi is a barebones system.  No unique or personal data is stored on it.  All it does is listen to the keyboard and format the barcode for printing.  
 
 It is the user's responsibility to determine local security implications of using this system and to make any adjustements if deemed necessary.
-
-
